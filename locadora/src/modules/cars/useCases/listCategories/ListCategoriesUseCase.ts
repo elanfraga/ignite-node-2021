@@ -1,4 +1,4 @@
-import { Category } from '../../model/Category';
+import { Category } from '../../entities/Category';
 import { CategoriesRepository } from '../../repositories/implemantations/CategoriesRepository';
 
 class ListCategoriesUseCase {
