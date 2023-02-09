@@ -7,7 +7,11 @@ import { AppError } from '@shared/errors/AppError';
 interface IPayload {
   sub: string;
 }
-export function ensureAuthenticated(request: Request, response: Response, next: NextFunction) {
+export async function ensureAuthenticated(
+  request: Request,
+  response: Response,
+  next: NextFunction,
+) {
   const authHeader = request.headers.authorization;
 
   if (!authHeader) {
@@ -20,7 +24,7 @@ export function ensureAuthenticated(request: Request, response: Response, next: 
     const { sub: user_id } = verify(token, 'ceede8b535cec4194415335ea5a5b854') as IPayload;
 
     const userRepository = new UsersRepository();
-    const user = userRepository.findById(user_id);
+    const user = await userRepository.findById(user_id);
     if (!user) {
       throw new AppError('User does not exist', 401);
     }
