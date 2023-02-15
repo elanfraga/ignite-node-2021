@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for account/useCases/createUser/CreateUserUseCase.ts</title>
+    <title>Code coverage report for rentals/useCases/createRental/CreateRentalUseCase.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
@@ -19,20 +19,20 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">account/useCases/createUser</a> CreateUserUseCase.ts</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">rentals/useCases/createRental</a> CreateRentalUseCase.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">94.11% </span>
+                <span class="strong">88.23% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>32/34</span>
+                <span class='fraction'>30/34</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">80% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>4/5</span>
+                <span class='fraction'>4/6</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">94.11% </span>
+                <span class="strong">88.23% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>32/34</span>
+                <span class='fraction'>30/34</span>
             </div>
         
             
@@ -107,64 +107,64 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { hash } from 'bcrypt';
-import { inject, injectable } from 'tsyringe';
-&nbsp;
-import { ICreateUserDTO } from '@modules/account/dtos/ICreateUserDTO';
-import { IUsersRepository } from '@modules/account/repositories/IUsersRepository';
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { IRentalRepository } from '@modules/rentals/repositories/IRentalRepository';
 import { AppError } from '@shared/errors/AppError';
 &nbsp;
-@injectable()
-class CreateUserUseCase {
+interface IRequest {
+  user_id: string;
+  car_id: string;
+  expected_return_date: Date;
+}
+&nbsp;
+class CreateRentalUseCase {
   constructor(
-    @inject('UsersRepository')
-    private usersRepository: IUsersRepository,
+    private rentalRepository: IRentalRepository,
   ) {}
 &nbsp;
   async execute({
-    name, password, email, driver_license,
-  }: ICreateUserDTO): Promise&lt;void&gt; {
-    const passwordHash = await hash(password, 8);
+    user_id,
+    car_id,
+    expected_return_date,
+  }: IRequest): Promise&lt;void&gt; {
+    const carUnvailable = await this.rentalRepository.findOpenRentalByCar(car_id);
 &nbsp;
-    const userAlredyExists = await this.usersRepository.findByEmail(email);
-&nbsp;
-    if (userAlredyExists) <span class="branch-0 cbranch-no" title="branch not covered" >{</span>
-<span class="cstat-no" title="statement not covered" >      throw new AppError('User already exists');</span>
+    if (carUnvailable) <span class="branch-0 cbranch-no" title="branch not covered" >{</span>
+<span class="cstat-no" title="statement not covered" >      throw new AppError('Car is unavailable');</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
 &nbsp;
-    await this.usersRepository.create({
-      name,
-      password: passwordHash,
-      email,
-      driver_license,
-    });
+    const rentalOpenToUser = await this.rentalRepository.findOpenRentalByUser(user_id);
+&nbsp;
+    if (rentalOpenToUser) <span class="branch-0 cbranch-no" title="branch not covered" >{</span>
+<span class="cstat-no" title="statement not covered" >      throw new AppError('Thehe is a rental progress in user!');</span>
+<span class="cstat-no" title="statement not covered" >    }</span>
   }
 }
-export { CreateUserUseCase };
+&nbsp;
+export { CreateRentalUseCase };
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
