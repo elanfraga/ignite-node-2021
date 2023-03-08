@@ -21,7 +21,7 @@ class UserTokens {
   user: User;
 
   @Column()
-  exipres_date: Date;
+  expires_date: Date;
 
   @CreateDateColumn()
   created_at: Date;
