@@ -1,17 +1,17 @@
 import { Request, response, Response } from 'express';
 import { container } from 'tsyringe';
 
-import { SendForggotPasswordMailUseCase } from './SendForggotPasswordMailUseCase';
+import { SendForgotPasswordMailUseCase } from './SendForgotPasswordMailUseCase';
 
-class SendForggotPasswordMailController {
+class SendForgotPasswordMailController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { email } = request.body;
 
-    const sendForggotPasswordMailUseCase = container.resolve(SendForggotPasswordMailUseCase);
+    const sendForggotPasswordMailUseCase = container.resolve(SendForgotPasswordMailUseCase);
 
     await sendForggotPasswordMailUseCase.execute(email);
     return response.send();
   }
 }
 
-export { SendForggotPasswordMailController };
+export { SendForgotPasswordMailController };
